@@ -64,12 +64,26 @@ class Student {
     });
   }
 
-  // FINDORCREATE IS UNFINISHED
   static findOrCreate(connection, studentObj) {
     let file = connection.filename;
     let db = new sqlite.Database(file);
     let query = `INSERT INTO students (first_name, last_name, cohort_id) VALUES ('${studentObj.first_name}', '${studentObj.last_name}', '${studentObj.cohort_id}')`;
-
+    db.serialize(() => {
+      db.run(query, (err) => {
+        if(err) {
+          db.get(`SELECT * FROM students WHERE first_name = '${studentObj.first_name}'`, (err, row) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(`A record with first_name = '${studentObj.first_name}' is found, and first_name is set to UNIQUE.`);
+              console.log(JSON.stringify(row));
+            }
+          });
+        } else {
+          console.log(`Student has been succesfully updated.`);
+        }
+      });
+    });
   }
 
   static update(connection, newStudentObj) {
