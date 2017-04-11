@@ -39,18 +39,23 @@ class Student {
 
     let query = `INSERT INTO students (firstname, lastname, cohort_id) VALUES ( '${student_obj.firstname}', '${student_obj.lastname}', ${student_obj.cohort_id})`
 
-    db.serialize(function () {
-      db.run(query, function (err) {
-        if (err) {
-          console.log(err);
-        }
-        else {
-          // current_student._id = this.lastID;
-          console.log(`Insert Student '${student_obj.firstname}' Successfully.`);
-        }
-      });
-    });
+    return new Promise( function(resolve, reject) {
 
+      db.serialize(function () {
+        db.run(query, function (err) {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
+          else {
+            student_obj._id = this.lastID;
+            console.log(`Insert Student '${student_obj.firstname}' Successfully.`);
+            resolve(student_obj);
+          }
+        });
+      });
+
+    })// end of Promise
 
   } // end of create
 
@@ -58,17 +63,24 @@ class Student {
     let db = connection;
 
     let query = `UPDATE students SET firstname = '${student_obj.firstname}', lastname = '${student_obj.lastname}', cohort_id = ${student_obj.cohort_id} WHERE id = ${student_obj.id}`
-    db.serialize(function () {
-      db.run(query, function (err) {
-        if (err) {
-          console.log(err);
-        }
-        else {
-          // current_student._id = this.lastID;
-          console.log(`Updated Student id:${student_obj.id}, ${student_obj.firstname} Successfully.`);
-        }
+
+    return new Promise( function(resolve, reject) {
+
+      db.serialize(function () {
+        db.run(query, function (err) {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
+          else {
+            console.log("------------------" + this.lastID);
+            console.log(`Updated Student id:${student_obj.id}, ${student_obj.firstname} Successfully.`);
+            resolve(student_obj);
+          }
+        });
       });
-    });
+
+    })
 
   } // end of update
 

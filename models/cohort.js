@@ -18,21 +18,28 @@ class Cohort {
 
   static create (connection, cohort_obj) {
     let db = connection;
-    // let current_student = this;
+    // let current_cohort = this;
 
     let query = `INSERT INTO cohorts (name) VALUES ( '${cohort_obj.name}')`
 
-    db.serialize(function () {
-      db.run(query, function (err) {
-        if (err) {
-          console.log(err);
-        }
-        else {
-          // current_student._id = this.lastID;
-          console.log(`Insert Cohort '${cohort_obj.name}' Successfully.`);
-        }
+    return new Promise( function(resolve, reject) {
+
+      db.serialize(function () {
+        db.run(query, function (err) {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
+          else {
+            cohort_obj._id = this.lastID;
+            console.log(`Insert Cohort '${cohort_obj.name}' Successfully.`);
+            resolve(cohort_obj);
+          }
+        });
       });
-    });
+
+    }) // end of promise
+
 
   } // end of create
 
