@@ -3,10 +3,15 @@
 import DBModel from "./models/db_model.js";
 import Cohort from "./models/cohort.js";
 import Student from "./models/student.js";
+import * as Repl from "repl"
 
-const repl = require('repl');
-const replServer = repl.start('> ');
+let dbModel = new DBModel('db/student.db');
 
-replServer.context.Student = Student;
-replServer.context.DBModel = DBModel;
-replServer.context.Cohort = Cohort;
+
+let argv = process.argv;
+if (argv[2] === 'playtime') {
+  let repl = Repl.start('Command Here>');
+  repl.context.dbModel = dbModel;
+  repl.context.Student = Student;
+  repl.context.Cohort  = Cohort;
+}
