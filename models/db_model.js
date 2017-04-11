@@ -1,23 +1,51 @@
 "use strict"
 
-const repl = require('repl');
-const sqlite = require('sqlite3').verbose();
+let repl = require('repl');
+// const sqlite = require('sqlite3').verbose();
 
 class DBModel {
-  constructor(file = '.db/students.db') {
-    this.file = file;
-    this.connection = new sqlite.Database(this.file);
-  }
+
+
+  static createStudent(query) {
+    let sqlite = require('sqlite3').verbose();
+    const db = new sqlite.Database('.db/student.db');
+    db.serialize(() => {
+      db.run(query, (err) => {
+        if(err) { console.log(err); }
+          else {
+            console.log(`berhasil menambah tabel students`);
+          }
+      });
+    }
+  )};
+
+  static createCohort(query) {
+    let sqlite = require('sqlite3').verbose();
+    const db = new sqlite.Database('.db/student.db');
+    db.serialize(() => {
+      db.run(query, (err) => {
+        if(err) { console.log(err); }
+          else {
+            console.log(`berhasil menambah tabel cohorts`);
+          }
+      });
+    }
+  )};
 
   static createTable() {
-    const db = this.connection;
-    const CREATE_STUDENT = "CREATE TABLE IF NOT EXISTS students ( id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT NOT NULL, lastname TEXT, birthdate DATE );";
-    const CREATE_COHORT = "CREATE TABLE IF NOT EXISTS cohorts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL );";
+    const CREATE_STUDENT = "CREATE TABLE IF NOT EXISTS students ( id INTEGER PRIMARY KEY AUTOINCREMENT, firstname VARCHAR NOT NULL, lastname VARCHAR, birthdate DATE );";
+    const CREATE_COHORT = "CREATE TABLE IF NOT EXISTS cohorts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR NOT NULL );";
     
+    DBModel.createStudent(CREATE_STUDENT);
+    DBModel.createCohort(CREATE_COHORT);
     
+  } // end of createTable
 
   }
+  
 
-}
+  
+  
+
 
 export default DBModel
