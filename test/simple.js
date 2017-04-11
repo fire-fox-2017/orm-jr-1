@@ -24,8 +24,9 @@ Cohort.create(db.connection, new Cohort("Super"))
 console.log("Inserting new student...");
 Student.create(db.connection, new Student("Alan", "Branch", 1))
   .then( function(result) {
-    // console.log("----",result);
-    if(result.firstname == "Alan" && result.lastname == "Branch")
+    console.log("----")
+    console.log(result);
+    if(result.id == 7)
       console.log(`===> Created Student '${result.firstname} ${result.lastname}' : success`);
     else
       console.log(`**** FAIL creating Student!`)
