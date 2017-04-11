@@ -5,8 +5,8 @@ const repl = require('repl');
 const sqlite = require('sqlite3').verbose();
 
 // Query
-const CREATE_STUDENT = "CREATE TABLE IF NOT EXISTS students ( id INTEGER PRIMARY KEY AUTOINCREMENT, firstname VARCHAR(25), lastname VARCHAR(25), birthdate DATE );";
-const CREATE_COHORT = "CREATE TABLE IF NOT EXISTS cohorts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(25) );";
+const CREATE_STUDENT = "CREATE TABLE IF NOT EXISTS students ( id INTEGER PRIMARY KEY AUTOINCREMENT, firstname VARCHAR(25) NOT NULL UNIQUE, lastname VARCHAR(25), cohort_id int );";
+const CREATE_COHORT = "CREATE TABLE IF NOT EXISTS cohorts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(25) NOT NULL UNIQUE );";
 
 
 class DBModel {
