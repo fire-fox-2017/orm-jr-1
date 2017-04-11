@@ -29,7 +29,7 @@ Student.create(dbModel.connection, new Student("firstname", "lastname", cohort_i
 }
 
 
-let dbModel = new DBModel();
+let dbModel = new DBModel('./db/student.db');
 
 const repl = require('repl');
 const replServer = repl.start({prompt: '> '});

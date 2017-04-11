@@ -3,10 +3,10 @@
 
 
 class DBModel {
-  constructor () {
+  constructor (db_file) {
     const sqlite = require('sqlite3').verbose();
-    // this.filename = './db/student.db';
-    this.connection = new sqlite.Database('./db/student.db');
+    this.filename = db_file;
+    this.connection = new sqlite.Database(this.filename);
   }
 
   setup() {
