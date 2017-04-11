@@ -2,10 +2,35 @@
 
 import Student from "./student.js";
 
+const sqlite = require('sqlite3').verbose();
+
 class Cohort {
   constructor(name, id = null) {
-    this.name = firstName;
+    this.name = name;
     this.id = id;
+  }
+
+  static findAll(connection, callback) {
+    let file = connection.filename;
+    let db = new sqlite.Database(file);
+    let query = `SELECT * FROM cohorts`;
+    db.serialize(() => {
+      db.all(query, (err, rows) => {
+        callback(rows, err);
+      });
+    });
+  }
+
+  static where(connection, string, callback) {
+    let searchArr = string.split(" = ");
+    let file = connection.filename;
+    let db = new sqlite.Database(file);
+    let query = `SELECT * FROM cohorts WHERE ${searchArr[0]} = ${searchArr[1]}`;
+    db.serialize(() => {
+      db.all(query, (err, rows) => {
+        callback(rows, err);
+      });
+    });
   }
 
   static create(connection, cohortObj) {

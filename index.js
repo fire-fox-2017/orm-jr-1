@@ -17,3 +17,4 @@ let help = () => {
 replServer.context.help = help;
 replServer.context.dbModel = new DBModel();
 replServer.context.Student = Student;
+replServer.context.Cohort = Cohort;
