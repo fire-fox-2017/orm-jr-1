@@ -35,6 +35,42 @@ class Student {
     });
   }
 
+  static delete(db, id) {
+    let deleteQuery = `DELETE from students WHERE id = '${id}'`;
+    db.serialize(() => {
+      db.run(deleteQuery, (err) => {
+        err ? console.log(err) : console.log(`deleted!`);
+      })
+    });
+  }
+
+  static findById(db, id) {
+    let findByIdQuery = `SElECT * FROM students WHERE id LIKE ${id}`;
+    db.serialize(() => {
+      db.each(findByIdQuery, (err, row) => { // kalau each return satu per satu
+        err ? console.log(err) : console.log(row);
+      });
+    });
+  }
+
+  static findAll(db, callback) {
+    let findByAllQuery = `SELECT * FROM students`;
+    db.serialize(() => {
+      db.all(findByAllQuery, (err, data) => { // kalau all return semuanya
+        err ? callback(null, err) : callback(data, null);
+      });
+    });
+  }
+
+  static where(db, value, callback) {
+    let whereQuery = `SELECT * FROM students WHERE ${value}`;
+    db.serialize(() => {
+      db.all(whereQuery, (err, data) => {
+        err ? callback(null, err) : callback(data, null);
+      })
+    })
+  }
+
 }
 
 export default Student
