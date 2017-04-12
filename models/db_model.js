@@ -5,9 +5,9 @@ const repl = require('repl');
 const sqlite = require('sqlite3').verbose();
 
 // Query
-const CREATE_STUDENT = "CREATE TABLE IF NOT EXISTS students ( id INTEGER PRIMARY KEY AUTOINCREMENT, firstname VARCHAR(25) NOT NULL UNIQUE, lastname VARCHAR(25), cohort_id int );";
-const CREATE_COHORT = "CREATE TABLE IF NOT EXISTS cohorts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(25) NOT NULL UNIQUE );";
-
+const CREATE_STUDENT = `CREATE TABLE IF NOT EXISTS students (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname VARCHAR(100) NOT NULL, lastname VARCHAR(100) NOT NULL, cohort_id INTEGER, FOREIGN KEY(cohort_id) references cohorts(id) )`;
+const CREATE_COHORT = `CREATE TABLE IF NOT EXISTS cohorts (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(100) NOT NULL)`;
+// const SEED_STUDENT = `INSERT INTO students (firstname, lastname, cohort_id) VALUES ('John', 'Doe', '1'), ('Robb', 'Wick', '1')`;
 
 class DBModel {
   constructor(dbfile) {
@@ -33,6 +33,13 @@ class DBModel {
           console.log('Table cohorts created');
         }
       });
+      // db.run(SEED_STUDENT, function(err) {
+      //   if(err) {
+      //     console.log(err);
+      //   } else {
+      //     console.log('successfully seed student data');
+      //   }
+      // });
     });
   }
 
