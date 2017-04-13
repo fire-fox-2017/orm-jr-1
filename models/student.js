@@ -37,10 +37,11 @@ class Student {
   }
 
   static where(connection, string, callback) {
-    let searchArr = string.split(" = ");
+    // let searchArr = string.split(" = ");
+    let searchArr = string.match(/\w+/g);
     let file = connection.filename;
     let db = new sqlite.Database(file);
-    let query = `SELECT * FROM students WHERE ${searchArr[0]} = ${searchArr[1]}`;
+    let query = `SELECT * FROM students WHERE ${searchArr[0]} = '${searchArr[1]}'`;
     db.serialize(() => {
       db.all(query, (err, rows) => {
         callback(rows, err);
@@ -139,5 +140,5 @@ class Student {
 
 export default Student
 
-
+// export PATH=$PATH:node_modules/.bin
 // Student.where(dbModel.connection, "first_name = 'Joko'",  function(data, err) {if(!err) {console.log(data);} else { console.log(err); }})
