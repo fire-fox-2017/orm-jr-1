@@ -27,7 +27,7 @@ class Cohort {
   }
 
   static delete(db, id) {
-    let deleteQuery = `DELETE FROM cohorts WHERE id  = ${id}`;
+    let deleteQuery = `DELETE FROM cohorts WHERE id = ${id}`;
     db.serialize(() => {
       db.run(deleteQuery, (err) => {
         err ? console.log(err) : console.log(`berhasil di delete`);
@@ -36,7 +36,30 @@ class Cohort {
   }
 
   static findById(db, id) {
-    let findQuery = `SELECT * FROM cohorts`
+    let findQuery = `SELECT * FROM cohorts WHERE id LIKE ${id}`;
+    db.serialize(() => {
+      db.each(findQuery, (err, row) => { // kalau each return satu per satu
+        err ? console.log(err) : console.log(row);
+      });
+    });
+  }
+
+  static findAll(db, callback) {
+    let findByAllQuery = `SELECT * FROM cohorts`;
+    db.serialize(() => {
+      db.all(findByAllQuery, (err, data) => { // kalau all return semuanya
+        err ? callback(null, err) : callback(data, null);
+      });
+    });
+  }
+
+  static where(db, value, callback) {
+    let whereQuery = `SELECT * FROM cohorts WHERE ${value}`;
+    db.serialize(() => {
+      db.all(whereQuery, (err, data) => {
+        err ? callback(null, err) : callback(data, null);
+      })
+    })
   }
 
 }
