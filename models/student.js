@@ -1,102 +1,86 @@
 "use strict"
 
-const sqlite = require('sqlite3').verbose();
+import DBModel from "./db_model.js"
 
 class Student {
-  constructor(firstname, lastname, id_cohort, id_student=0){
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.id_cohort = id_cohort;
-    this.id_student = id_student;
-  }
+    constructor(firstname, lastname, idCohor, id = 0) {
+        this._firstname = firstname
+        this._lastname = lastname
+        this._idCohor = idCohor
+        this._id = id
+    }
 
-  static create(connection, objStudent){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query1 = `INSERT INTO student (firstname, lastname, id_cohort) VALUES ('${objStudent.firstname}', '${objStudent.lastname}', '${objStudent.id_cohort}')`;
-    db.serialize(function(){
-      db.run(query1, function(err){
-        if (err){
-          console.log(err);
-        } else {
-          console.log('Sukses Memasukkan Data Siswa');
-        }
-      })
-    });
-  }
+    static create(db, objStudent) {
+        let query1 = `INSERT INTO students (firstname, lastname, idCohor) VALUES ('${objStudent._firstname}', '${objStudent._lastname}', ${objStudent._idCohor})`
+        db.serialize(() => {
+            db.run(query1, (err) => {
+                if (err) {
+                    console.log(`Insert to table student error`);
+                    reject(err)
+                } else {
+                    console.log(`Insert to table student successfull`);
+                }
+            })
+        })
+    }
 
-  static update(connection, objStudent){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query2 = `UPDATE student SET firstname = '${objStudent.firstname}' ,lastname = '${objStudent.lastname}',id_cohort = '${objStudent.id_cohort}' where id = '${objStudent.id_student}'`;
-    db.serialize(function(){
-      db.run(query2, function(err){
-        if (err){
-          console.log(err);
-        } else {
-          console.log('Sukses Mengedit Data Siswa');
-        }
-      })
-    });
-  }
+    static update(db, objStudent) {
+        db.serialize(() => {
+            let query2 = `UPDATE students SET firstname = '${objStudent._firstname}', lastname = '${objStudent._lastname}', idCohor = '${objStudent._idCohor}' WHERE id = '${objStudent._id}'`
+            db.run(query2, (err) => {
+                if (err) {
+                    console.log(`Update data error`);
+                } else {
+                    console.log(`Update data: ${objStudent._id}|${objStudent._firstname}|${objStudent._lastname}|${objStudent._idCohor}`);
+                }
+            })
+        })
+    }
 
-  static delete(connection,id_student){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query3 = `DELETE FROM student WHERE id = '${id_student}'`;
-    db.serialize(function(){
-      db.run(query3, function(err){
-        if (err){
-          console.log(err);
-        } else {
-          console.log('Sukses Menghapus Data Siswa');
-        }
-      })
-    });
-  }
+    static delete(db, idStudent) {
+        db.serialize(() => {
+            let query3 = `DELETE FROM students WHERE id = ${idStudent}`
+            db.run(query3, (err) => {
+                if (err) {
+                    console.log(`Delete data student with id: ${idStudent} error`);
+                } else {
+                    console.log(`Delete data student with id: ${idStudent} successfull`);
+                }
+            })
+        })
+    }
 
-  static findById(connection,id_student){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query4 = `SELECT * FROM student where id = '${id_student}'`;
-    db.serialize(function(){
-      db.each(query4, function(err, row){
-        if (err){
-          console.log(err);
-        } else {
-          console.log(JSON.stringify(row));
-        }
-      })
-    });
-  }
+    static findById(db, idStudent) {
+        db.serialize(() => {
+            let query4 = `SELECT * FROM students WHERE id = ${idStudent}`
+            db.each(query4, (err, row) => {
+                if (err) {
+                    console.log(`Get data student with id: ${idStudent} error`);
+                } else {
+                    console.log(`${row.id}|${row.firstname}|${row.lastname}|${row.idCohor}`);
+                }
+            })
+        })
+    }
 
-  static findAll(connection, callback){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query6 = `SELECT * FROM student`;
-    db.serialize(function(){
-      db.all(query6, function(err, rows){
-        callback(rows,err)
-      });
-    });
-  }
+    static findAll(db, callback) {
+        db.serialize(() => {
+            let query5 = `SELECT * FROM students`
+            db.all(query5, (err, rows) => {
+                callback(rows, err)
+            })
+        })
+    }
 
-  static where(connection, string ,callback){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    var string = string.split(' = ');
-    let query7 = `SELECT * FROM student WHERE ${string[0]} = ${string[1]}`;
-    // console.log(string);
-    db.serialize(function(){
-      db.all(query7, function(err, rows){
-        callback(rows,err)
-      });
-    });
-  }
-
+    static where(db, string, callback) {
+        let str = string.split('=')
+        db.serialize(() => {
+            let query6 = `SELECT * FROM students WHERE ${str}`
+            db.all(query6, (err, rows) => {
+                callback(rows, err)
+            })
+        })
+    }
 }
 
 export default Student
-
-// Student.findAll(dbModel.connection,function(data, err) {if(!err) {console.log(data);} else { console.log(err); }})
-// Student.where(dbModel.connection, "firstname = 'Alim'",  function(data, err) {if(!err) {console.log(data);} else { console.log(err); }})

@@ -1,102 +1,85 @@
 "use strict"
 
 import Student from "./student.js";
-
-const sqlite = require('sqlite3').verbose();
+import DBModel from "./db_model.js"
 
 class Cohort {
-  constructor(cohort_name, id = 0){
-    this.cohort_name = cohort_name;
-    this.id = id;
-  }
+    constructor(name, id = 0) {
+        this._name = name
+        this._id = id
+    }
 
-  static create(connection, objCohort){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query1 = `INSERT INTO cohort (cohort_name) VALUES ('${objCohort.cohort_name}')`;
-    db.serialize(function(){
-      db.run(query1, function(err){
-        if (err){
-          console.log(err);
-        } else {
-          console.log('Sukses Memasukkan Data Cohort');
-        }
-      })
-    });
-  }
+    static create(db, objCohort) {
+        db.serialize(() => {
+            let query1 = `INSERT INTO cohorts (name) VALUES ('${objCohort._name}')`
+            db.run(query1, (err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(`Data cohort berhasil ditambah`);
+                }
+            })
+        })
+    }
 
-  static update(connection, objCohort){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query2 = `UPDATE cohort SET cohort_name = '${objCohort.cohort_name}' where id = '${objCohort.id}'`;
-    db.serialize(function(){
-      db.run(query2, function(err){
-        if (err){
-          console.log(err);
-        } else {
-          console.log('Sukses Mengedit Data Cohort');
-        }
-      })
-    });
-  }
+    static update(db, objCohort) {
+        db.serialize(() => {
+            let query2 = `UPDATE cohorts SET name = '${objCohort._name}' WHERE id = '${objCohort._id}'`
+            db.run(query2, (err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(`Data cohort berhasil diedit`);
+                }
+            })
+        })
+    }
 
-  static delete(connection,id){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query3 = `DELETE FROM cohort WHERE id = '${id}'`;
-    db.serialize(function(){
-      db.run(query3, function(err){
-        if (err){
-          console.log(err);
-        } else {
-          console.log('Sukses Menghapus Data Cohort');
-        }
-      })
-    });
-  }
+    static delete(db, idCohort) {
+        db.serialize(() => {
+            let query3 = `DELETE FROM cohorts WHERE id = ${idCohort}`
+            db.run(query3, (err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(`ata cohort berhasil dihapus`);
+                }
+            })
+        })
+    }
 
-  static findById(connection,id){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query4 = `SELECT * FROM cohort where id = '${id}'`;
-    db.serialize(function(){
-      db.each(query4, function(err, row){
-        if (err){
-          console.log(err);
-        } else {
-          console.log(JSON.stringify(row));
-        }
-      })
-    });
-  }
+    static findById(db, idCohort) {
+        db.serialize(() => {
+            let query4 = `SELECT * FROM cohorts WHERE id = ${idCohort}`
+            db.each(query4, (err, row) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(`${row.id}|${row.name}`);
+                }
+            })
+        })
+    }
 
-  static findAll(connection, callback){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    let query6 = `SELECT * FROM cohort`;
-    db.serialize(function(){
-      db.all(query6, function(err, rows){
-        callback(rows,err)
-      });
-    });
-  }
+    static findAll(db, callback) {
+        db.serialize(() => {
+            let query5= `SELECT * FROM cohorts`
+            db.all(query5, (err, rows) => {
+                callback(rows, err)
+            })
+        })
+    }
 
-  static where(connection, string ,callback){
-    var file = connection.filename;
-    var db = new sqlite.Database(file);
-    var string = string.split(' = ');
-    let query7 = `SELECT * FROM cohort WHERE ${string[0]} = ${string[1]}`;
-    // console.log(string);
-    db.serialize(function(){
-      db.all(query7, function(err, rows){
-        callback(rows,err)
-      });
-    });
-  }
+    static where(db, string, callback) {
+        let str = string.split('=')
+        db.serialize(() => {
+            let query6 = `SELECT * FROM cohorts WHERE ${str}`
+            db.all(query6, (err, rows) => {
+                callback(rows, err)
+            })
+        })
+    }
 
 }
 
 export default Cohort
-
-// Cohort.findAll(dbModel.connection,function(data, err) {if(!err) {console.log(data);} else { console.log(err); }})
-// Cohort.where(dbModel.connection, "cohort_name = 'Kerja'",  function(data, err) {if(!err) {console.log(data);} else { console.log(err); }})
