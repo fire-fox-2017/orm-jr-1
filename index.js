@@ -12,3 +12,5 @@ let replServer = repl.start({
 replServer.context.dbModel = new DBModel("./db/student.db")
 replServer.context.Student = Student
 replServer.context.Cohort = Cohort
+
+// Student.where(dbModel.connection, "first_name = 'Joko'",  function(data, err) {if(!err) {console.log(data);} else { console.log(err); }})

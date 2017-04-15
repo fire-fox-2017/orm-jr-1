@@ -73,9 +73,10 @@ class Student {
     }
 
     static where(db, string, callback) {
-        let str = string.split('=')
+        let str = string.split('=');
+        // console.log(str[1]);
         db.serialize(() => {
-            let query6 = `SELECT * FROM students WHERE ${str}`
+            let query6 = `SELECT * FROM students WHERE ${str[0]} = ${str[1]}`;
             db.all(query6, (err, rows) => {
                 callback(rows, err)
             })

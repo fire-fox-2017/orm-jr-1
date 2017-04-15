@@ -73,7 +73,7 @@ class Cohort {
     static where(db, string, callback) {
         let str = string.split('=')
         db.serialize(() => {
-            let query6 = `SELECT * FROM cohorts WHERE ${str}`
+            let query6 = `SELECT * FROM cohorts WHERE ${str[0]} = ${str[1]}}`;
             db.all(query6, (err, rows) => {
                 callback(rows, err)
             })
