@@ -19,8 +19,8 @@ class DBModel {
 
   setup() {
     let db = this.connection;
-    let create = "CREATE TABLE IF NOT EXIST student (id_student INTERGER PRIMARY KEY AUTOINCREMENT, firstname VARCHAR(50), lastname VARCHAR(50), cohort_id INTERGER,FOREIGN KEY(cohort_id) REFERENCES cohort(id_cohort))"
-    let createCohort = "CREATE TABLE IF NOT EXIST cohort (id_cohort INTERGER PRIMARY KEY AUTOINCREMENT, cohort_name VARCHAR(50), created_at VARCHAR(50))"
+    let create = "CREATE TABLE IF NOT EXISTS student (id_student INTEGER PRIMARY KEY AUTOINCREMENT, firstname VARCHAR(50), lastname VARCHAR(50), cohort_id INTEGER,FOREIGN KEY(cohort_id) REFERENCES cohort(id_cohort))"
+    let createCohort = "CREATE TABLE IF NOT EXISTS cohort (id_cohort INTEGER PRIMARY KEY AUTOINCREMENT, cohort_name VARCHAR(50), created_at VARCHAR(50))"
     db.serialize(function() {
       db.run(create, function(err) {
         if (err) {

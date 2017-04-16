@@ -1,10 +1,10 @@
-"use strict"
+npm"use strict"
 import Student from "./student.js";
 
 // const repl = require("repl");
 // const sqlite = require("sqlite3").verbose();
 // const replServer = repl.start('>  ');
-// 
+//
 // var file = "db/student.db"
 // var db = new sqlite.Database(file);
 
