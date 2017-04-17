@@ -55,7 +55,7 @@ class Student {
                 if (err) {
                     console.log(`Get data student with id: ${idStudent} error`);
                 } else {
-                    console.log(`${row.id}|${row.firstname}|${row.lastname}|${row.idCohort}`);
+                    console.log(`${row.id}|${row.first_name}|${row.last_name}|${row.id_cohort}`);
                 }
             })
         })
