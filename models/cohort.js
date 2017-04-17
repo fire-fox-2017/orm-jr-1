@@ -56,7 +56,7 @@ class Cohort {
                 if (err) {
                     console.log(`Get data cohort with id: ${idCohort} error`);
                 } else {
-                    console.log(`${row.id}|${row.name}`);
+                    console.log(`${row.id}|${row.cohort_name}`);
                 }
             })
         })
