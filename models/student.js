@@ -25,10 +25,10 @@ class Student {
     });
   }
 
-  static findAll(connection, limitOffset, callback) {
+  static findAll(connection, callback) {
     let file = connection.filename;
     let db = new sqlite.Database(file);
-    let query = `SELECT * FROM students LIMIT ${limitOffset.limit} OFFSET ${limitOffset.offset}`;
+    let query = `SELECT * FROM students`;
     db.serialize(() => {
       db.all(query, (err, rows) => {
         callback(rows, err);
@@ -142,3 +142,12 @@ export default Student
 
 // export PATH=$PATH:node_modules/.bin
 // Student.where(dbModel.connection, "first_name = 'Joko'",  function(data, err) {if(!err) {console.log(data);} else { console.log(err); }})
+// Student.findAll(dbModel.connection, (data, err) => {
+//   if(!err) {
+//     for(var i =0; i < data.length;i++) {
+//       console.log(data[i]);
+//     }
+//   } else {
+//     console.log(err);
+//   }
+// })

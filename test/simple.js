@@ -1,6 +1,3 @@
-// import DBModel from "../models/db_model.js";
-// import Student from "../models/student.js";
-
 const repl = require('repl');
 const sqlite = require('sqlite3').verbose();
 let file = "../db/test.db";
@@ -8,7 +5,7 @@ var db = new sqlite.Database(file)
 
 let replServer = repl.start({prompt: '> '});
 
-let student = {first_name: "Tom", last_name: "Yorke", cohort_id: 2};
+let student = {first_name: "Damon", last_name: "Albarn", cohort_id: 2};
 
 let where = (string, callback) => {
   let searchArr = string.match(/\w+/g)
