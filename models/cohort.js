@@ -25,7 +25,7 @@ class Cohort {
 
     static update(db, objCohort) {
         db.serialize(() => {
-            let UPDATE_DATA_COHORTS = `UPDATE cohorts SET name = '${objCohort._name}' WHERE id = '${objCohort._id}'`
+            let UPDATE_DATA_COHORTS = `UPDATE cohorts SET cohort_name = '${objCohort._name}' WHERE id = '${objCohort._id}'`
             db.run(UPDATE_DATA_COHORTS, (err) => {
                 if (err) {
                     console.log(`Update data error`);

@@ -24,7 +24,7 @@ class Student {
 
     static update(db, objStudent) {
         db.serialize(() => {
-            let UPDATE_DATA_STUDENT = `UPDATE students SET first_name = '${objStudent._firstname}', last_name = '${objStudent._lastname}', id_cohortohor = '${objStudent._idCohort}' WHERE id = '${objStudent._id}'`
+            let UPDATE_DATA_STUDENT = `UPDATE students SET first_name = '${objStudent._firstname}', last_name = '${objStudent._lastname}', id_cohort = '${objStudent._idCohort}' WHERE id = '${objStudent._id}'`
             db.run(UPDATE_DATA_STUDENT, (err) => {
                 if (err) {
                     console.log(`Update data error`);
